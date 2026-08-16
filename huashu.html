@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>话术批量生成器</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --paper:#EAEBE4;
+    --card:#FFFFFF;
+    --ink:#1C2321;
+    --soft:#6B736F;
+    --line:#D5D7CE;
+    --accent:#2E6F6A;
+    --accent-dark:#255B57;
+    --done:#8A6E3B;
+    --done-soft:#F0E7D4;
+    --cond:#7A5C9E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:15px;line-height:1.6;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:28px 18px 72px;}
+  h1{font-size:21px;font-weight:650;margin:0 0 6px;letter-spacing:.02em;}
+  .sub{color:var(--soft);font-size:13.5px;margin:0 0 24px;}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 18px;margin-bottom:18px;}
+  h2{font-size:14px;font-weight:650;margin:0 0 4px;display:flex;align-items:baseline;gap:8px;}
+  h2 .step{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--accent);font-size:13px;}
+  .hint{color:var(--soft);font-size:13px;margin:0 0 12px;}
+  textarea,input[type=search]{
+    width:100%;border:1px solid var(--line);border-radius:8px;background:#FBFBF8;
+    font:inherit;font-size:14px;color:var(--ink);padding:10px 12px;resize:vertical;
+  }
+  textarea{line-height:1.75;}
+  textarea:focus,input[type=search]:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;}
+  #tpl{min-height:230px;}
+  #paste{min-height:100px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;}
+  .chipbox{margin-top:12px;}
+  .chiplabel{font-size:12.5px;color:var(--soft);margin:0 0 6px;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    font-size:12.5px;padding:5px 10px;border-radius:999px;cursor:pointer;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .chip:hover{border-color:var(--accent);color:var(--accent);}
+  .chip.cond{border-style:dashed;}
+  .chip.cond:hover{border-color:var(--cond);color:var(--cond);}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  label.file{border:1px solid var(--accent);color:var(--accent);background:transparent;font-size:13.5px;padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-block;}
+  label.file:hover{background:var(--paper);}
+  input[type=file]{position:absolute;width:1px;height:1px;opacity:0;}
+  button{font:inherit;cursor:pointer;}
+  .btn{border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:14px;padding:9px 18px;border-radius:8px;}
+  .btn:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+  .btn.ghost{background:transparent;color:var(--soft);border-color:var(--line);}
+  .btn.ghost:hover{color:var(--ink);border-color:var(--soft);}
+  button:focus-visible,.chip:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  select{font:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);max-width:220px;}
+  .map{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:12px;}
+  .map label{font-size:13.5px;color:var(--soft);display:flex;gap:6px;align-items:center;}
+  .checkline{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--soft);}
+  ul{list-style:none;margin:14px 0 0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  li{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--card);}
+  li:last-child{border-bottom:none;}
+  li.done{background:var(--done-soft);}
+  .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;font-weight:600;letter-spacing:.05em;color:var(--accent);min-width:62px;}
+  li.done .code{color:var(--done);}
+  .name{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14.5px;}
+  .tag{font-size:12px;color:var(--cond);border:1px solid var(--cond);border-radius:999px;padding:2px 8px;white-space:nowrap;}
+  .copy{border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:13.5px;padding:7px 16px;border-radius:8px;white-space:nowrap;}
+  .copy:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+  li.done .copy{background:transparent;color:var(--done);border-color:var(--done);}
+  .empty{padding:22px 14px;color:var(--soft);font-size:14px;text-align:center;background:var(--card);}
+  .count{font-size:13px;color:var(--soft);}
+  .warn{color:#9A4B31;font-size:13px;margin:10px 0 0;}
+  .preview-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;}
+  .preview-head span{font-size:13px;color:var(--soft);}
+  pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:inherit;font-size:13.5px;background:var(--paper);border-radius:8px;padding:12px;margin:10px 0 0;}
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
+    background:var(--ink);color:#fff;font-size:14px;padding:10px 18px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>话术批量生成器</h1>
+  <p class="sub">写一次话术模板，导入表格里的码和用户名，每个人生成一条，点一下复制就能粘贴发送。带条件的段落会自动跳过用不上的人。</p>
+
+  <section>
+    <h2><span class="step">01</span>导入表格</h2>
+    <p class="hint">选择 Excel 或 CSV 文件，或者在 Excel 里选中区域复制，粘贴到下面的框里。页面里已经放好了这次的 24 条数据，直接用也行。</p>
+    <div class="row">
+      <label class="file"><input type="file" id="file" accept=".xlsx,.xls,.csv,.txt"><span>选择文件</span></label>
+      <span class="divider count">或者粘贴</span>
+      <span class="count" id="fileName"></span>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <textarea id="paste" placeholder="查询码&#9;用户名&#9;总计几样&#9;岛内金额&#10;1126&#9;makiriko&#9;3&#9;2.16"></textarea>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <button class="btn" id="parseBtn">读取粘贴内容</button>
+      <label class="checkline"><input type="checkbox" id="hasHeader" checked>第一行是标题</label>
+    </div>
+    <div class="map" id="map">
+      <label>码这一列 <select id="colCode"></select></label>
+      <label>用户名这一列 <select id="colName"></select></label>
+      <span class="count" id="rowCount"></span>
+    </div>
+    <p class="warn" id="importWarn" hidden></p>
+  </section>
+
+  <section>
+    <h2><span class="step">02</span>话术模板</h2>
+    <p class="hint">花括号是替换位置，方括号是条件段落。条件段落只会发给那一列有数值的人，比如岛内金额是 0 的老师，补岛内那段会整段不出现。</p>
+    <textarea id="tpl" spellcheck="false"></textarea>
+
+    <div class="chipbox">
+      <p class="chiplabel">插入替换位置</p>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="chipbox">
+      <p class="chiplabel">插入条件段落，把要跳过的内容写在两个标记中间</p>
+      <div class="chips" id="condChips"></div>
+    </div>
+
+    <div class="preview-head">
+      <span>预览</span>
+      <select id="previewPick"></select>
+    </div>
+    <pre id="preview">先导入数据再看预览。</pre>
+  </section>
+
+  <section>
+    <h2><span class="step">03</span>逐条复制</h2>
+    <div class="row">
+      <input type="search" id="q" placeholder="搜索用户名或码" aria-label="搜索用户名或码" style="flex:1 1 200px;">
+      <span class="count" id="count"></span>
+      <button class="btn ghost" id="reset">清除标记</button>
+      <button class="btn ghost" id="clearData">清空数据</button>
+    </div>
+    <ul id="list"></ul>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const DEFAULT_TPL =
+"老师好，ick生日已出荷，月底准备寄回国，到时候我来私聊补国际国内运费。\n" +
+"以下表格是生日抽赏的排表list，之后会交给代发，作为发货的唯一凭证。\n" +
+"（下单数量多，数据有通过ai辅助处理，不保证100%正确。）请务必核对下单视频，确认自己的数量没有问题。\n" +
+"【发货后才发现list有问题的不处理售后！！】截止核对的ddl：8.31，如果超过ddl未核对自己的list，不处理任何售后\n" +
+"https://www.kdocs.cn/etapps/query/q/y5pKuPxP 【金山文档｜WPS云文档】邀你查询「ick生日-查询谷子数量」\n" +
+"如果数量无误，点击表格下方按钮签收。有问题第一时间联系我。\n" +
+"老师请输入以下数字查询：{查询码}\n" +
+"[[岛内金额]]*补岛内通知：每抽的岛内是0.72，老师抽了{总计几样}抽，需要补岛内{岛内金额}r，直接在聊天框zz即可。\n" +
+"注意：不补岛内无法发货，请及时补岛内。[[/岛内金额]]";
+
+const DEFAULT_HEADERS = ["查询码","用户名","总计几样","岛内金额"];
+const DEFAULT_ROWS = [
+["1126","makiriko","3","2.16"],
+["1217","STAR","1","0.72"],
+["1285","Uranus","10","7.2"],
+["1423","Yuwi酱","18","12.96"],
+["1516","不要中通申通","11","7.92"],
+["1648","非工作日请勿致电","35","25.2"],
+["1782","紧致的鸡屁股","18","12.96"],
+["1924","开心果芝士蛋糕","5","3.6"],
+["2237","没确收就是没拿","2","1.44"],
+["2384","蜜桃收藏展览会","7","5.04"],
+["2519","名次元枫盈","10","7.2"],
+["2673","名字无了","2","1.44"],
+["2814","魔精小a","3","2.16"],
+["2958","请阅读主页交易须知","15","10.8"],
+["3126","人类转掉了","0","0"],
+["3247","事后草仙人","20","14.4"],
+["3418","水曜魁星","0","0"],
+["3652","睡眠中的可可托缇","10","7.2"],
+["3816","死手别抽了","10","7.2"],
+["3954","提拉米苏玛奇朵","3","2.16"],
+["4127","问前看置顶","2","1.44"],
+["4458","屋顶摘草莓的飞旋鱼","7","5.04"],
+["4726","一百抽小一生日赏没心立","51","36.72"],
+["8941","有问题可直接私戳","20","14.4"]
+];
+
+let headers = DEFAULT_HEADERS.slice();
+let rows = DEFAULT_ROWS.map(r => r.slice());
+const copied = new Set();
+
+const el = id => document.getElementById(id);
+const tplEl = el("tpl"), listEl = el("list"), toastEl = el("toast");
+tplEl.value = DEFAULT_TPL;
+
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toastEl.classList.remove("show"), 1800);
+}
+
+async function saveTpl(){
+  try{ if(window.storage) await window.storage.set("huashu:tpl", tplEl.value); }catch(e){}
+}
+(async function loadSaved(){
+  try{
+    if(!window.storage) return;
+    const r = await window.storage.get("huashu:tpl");
+    if(r && r.value){ tplEl.value = r.value; refresh(); }
+  }catch(e){}
+})();
+
+/* ---------- 解析 ---------- */
+function splitLine(line){
+  if(line.indexOf("\t") >= 0) return line.split("\t");
+  const out = []; let cur = "", inQ = false;
+  for(let i = 0; i < line.length; i++){
+    const ch = line[i];
+    if(ch === '"'){
+      if(inQ && line[i+1] === '"'){ cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if(ch === "," && !inQ){ out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  out.push(cur);
+  return out;
+}
+
+function warn(msg){
+  const w = el("importWarn");
+  w.textContent = msg || "";
+  w.hidden = !msg;
+}
+
+function loadTable(matrix){
+  matrix = matrix.map(r => r.map(c => (c === null || c === undefined ? "" : String(c).trim())))
+                 .filter(r => r.some(c => c !== ""));
+  if(matrix.length === 0){ warn("没有读到内容，检查一下表格是不是空的。"); return; }
+
+  if(el("hasHeader").checked && matrix.length > 1){
+    headers = matrix[0].map((h, i) => h || ("列" + (i + 1)));
+    rows = matrix.slice(1);
+  }else{
+    headers = matrix[0].map((_, i) => "列" + (i + 1));
+    rows = matrix;
+  }
+  copied.clear();
+  warn("");
+  fillSelects();
+  refresh();
+  showToast("已读取 " + rows.length + " 行");
+}
+
+function guess(keys, fallback){
+  for(let i = 0; i < headers.length; i++){
+    if(keys.some(k => headers[i].includes(k))) return i;
+  }
+  return fallback;
+}
+
+function fillSelects(){
+  const cs = el("colCode"), ns = el("colName");
+  const oldC = cs.value, oldN = ns.value;
+  cs.innerHTML = ""; ns.innerHTML = "";
+  headers.forEach((h, i) => { cs.append(new Option(h, i)); ns.append(new Option(h, i)); });
+  cs.value = guess(["查询码","码","号","code"], 0);
+  ns.value = guess(["用户","昵称","name","姓名"], headers.length > 1 ? 1 : 0);
+  if(oldC && cs.options[oldC]) {}
+}
+
+el("parseBtn").addEventListener("click", () => {
+  const text = el("paste").value.replace(/\r/g, "");
+  if(!text.trim()){ warn("粘贴框是空的。"); return; }
+  loadTable(text.split("\n").map(splitLine));
+});
+
+el("file").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if(!f) return;
+  el("fileName").textContent = f.name;
+  const reader = new FileReader();
+  const isCsv = /\.(csv|txt)$/i.test(f.name);
+  reader.onload = ev => {
+    try{
+      if(isCsv){
+        loadTable(String(ev.target.result).replace(/\r/g, "").split("\n").map(splitLine));
+      }else{
+        if(typeof XLSX === "undefined"){
+          warn("读取 Excel 需要的组件没能加载。请把表格另存为 CSV，或者在 Excel 里复制粘贴到上面的框里。");
+          return;
+        }
+        const wb = XLSX.read(new Uint8Array(ev.target.result), {type:"array"});
+        const sh = wb.Sheets[wb.SheetNames[0]];
+        loadTable(XLSX.utils.sheet_to_json(sh, {header:1, defval:""}));
+      }
+    }catch(err){
+      warn("这个文件没能读出来，换成 CSV 或者直接复制粘贴试试。");
+    }
+  };
+  reader.onerror = () => warn("文件读取失败，换个文件试试。");
+  isCsv ? reader.readAsText(f, "UTF-8") : reader.readAsArrayBuffer(f);
+});
+
+/* ---------- 模板与条件段落 ---------- */
+function esc(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+function hasValue(v){
+  const s = String(v === undefined || v === null ? "" : v).trim();
+  if(s === "") return false;
+  const n = parseFloat(s.replace(/[^\d.\-]/g, ""));
+  if(!isNaN(n) && n === 0) return false;
+  return true;
+}
+
+function fill(row){
+  let out = tplEl.value;
+  headers.forEach((h, i) => {
+    const re = new RegExp("\\[\\[" + esc(h) + "\\]\\]([\\s\\S]*?)\\[\\[\\/" + esc(h) + "\\]\\]\\n?", "g");
+    out = out.replace(re, (m, inner) => hasValue(row[i]) ? inner : "");
+  });
+  headers.forEach((h, i) => {
+    out = out.split("{" + h + "}").join(row[i] === undefined ? "" : row[i]);
+  });
+  return out.replace(/\n{3,}/g, "\n\n").trimEnd();
+}
+
+function usesCondition(row){
+  return headers.some((h, i) => {
+    const re = new RegExp("\\[\\[" + esc(h) + "\\]\\][\\s\\S]*?\\[\\[\\/" + esc(h) + "\\]\\]");
+    return re.test(tplEl.value) && !hasValue(row[i]);
+  });
+}
+
+function insert(text){
+  const s = tplEl.selectionStart, e = tplEl.selectionEnd;
+  tplEl.value = tplEl.value.slice(0, s) + text + tplEl.value.slice(e);
+  tplEl.focus();
+  tplEl.selectionStart = tplEl.selectionEnd = s + text.length;
+  saveTpl(); refresh();
+}
+
+function renderChips(){
+  const box = el("chips"), cbox = el("condChips");
+  box.innerHTML = ""; cbox.innerHTML = "";
+  headers.forEach(h => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.type = "button"; b.textContent = "{" + h + "}";
+    b.addEventListener("click", () => insert("{" + h + "}"));
+    box.appendChild(b);
+
+    const c = document.createElement("button");
+    c.className = "chip cond"; c.type = "button"; c.textContent = "[[" + h + "]]…[[/" + h + "]]";
+    c.addEventListener("click", () => insert("[[" + h + "]]\n\n[[/" + h + "]]"));
+    cbox.appendChild(c);
+  });
+}
+
+tplEl.addEventListener("input", () => { saveTpl(); refresh(); });
+
+/* ---------- 复制 ---------- */
+async function copyText(text){
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(e){}
+  try{
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.top = "-1000px";
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){ return false; }
+}
+
+/* ---------- 渲染 ---------- */
+function renderPreviewPicker(){
+  const ci = +el("colCode").value || 0, ni = +el("colName").value || 0;
+  const sel = el("previewPick");
+  const keep = sel.value;
+  sel.innerHTML = "";
+  rows.forEach((r, i) => sel.append(new Option((r[ni] || r[ci] || ("第" + (i+1) + "条")), i)));
+  if(keep && sel.options[keep]) sel.value = keep;
+}
+
+function renderPreview(){
+  const sel = el("previewPick");
+  const i = rows.length ? (+sel.value || 0) : -1;
+  el("preview").textContent = i >= 0 && rows[i] ? fill(rows[i]) : "先导入数据再看预览。";
+}
+
+function renderList(){
+  const ci = +el("colCode").value || 0, ni = +el("colName").value || 0;
+  const kw = el("q").value.trim().toLowerCase();
+
+  listEl.innerHTML = "";
+  if(rows.length === 0){
+    listEl.innerHTML = '<li class="empty">还没有数据，先在上面导入表格。</li>';
+    el("count").textContent = "";
+    return;
+  }
+
+  const shown = rows.filter(r => !kw
+    || String(r[ci] || "").toLowerCase().includes(kw)
+    || String(r[ni] || "").toLowerCase().includes(kw));
+
+  if(shown.length === 0){
+    listEl.innerHTML = '<li class="empty">没有匹配的内容，换个关键词试试。</li>';
+  }
+
+  shown.forEach(r => {
+    const code = r[ci] || "", name = r[ni] || "";
+    const key = code + "|" + name;
+    const li = document.createElement("li");
+    if(copied.has(key)) li.className = "done";
+
+    const c = document.createElement("span");
+    c.className = "code"; c.textContent = code;
+
+    const n = document.createElement("span");
+    n.className = "name"; n.textContent = name;
+    li.append(c, n);
+
+    if(usesCondition(r)){
+      const t = document.createElement("span");
+      t.className = "tag"; t.textContent = "已跳过条件段落";
+      li.appendChild(t);
+    }
+
+    const b = document.createElement("button");
+    b.className = "copy";
+    b.textContent = copied.has(key) ? "已复制" : "复制";
+    b.addEventListener("click", async () => {
+      const ok = await copyText(fill(r));
+      if(ok){
+        copied.add(key);
+        showToast("已复制 " + (name || code) + " 的话术");
+        renderList();
+      }else{
+        showToast("复制失败，从上面的预览里手动复制");
+      }
+    });
+    li.appendChild(b);
+    listEl.appendChild(li);
+  });
+
+  el("count").textContent = "共 " + rows.length + " 条，已复制 " + copied.size + " 条";
+  el("rowCount").textContent = "当前 " + rows.length + " 行";
+}
+
+function refresh(){
+  renderChips();
+  renderPreviewPicker();
+  renderPreview();
+  renderList();
+}
+
+el("q").addEventListener("input", renderList);
+el("colCode").addEventListener("change", () => { renderPreviewPicker(); renderList(); });
+el("colName").addEventListener("change", () => { renderPreviewPicker(); renderList(); });
+el("previewPick").addEventListener("change", renderPreview);
+el("reset").addEventListener("click", () => { copied.clear(); renderList(); showToast("标记已清除"); });
+el("clearData").addEventListener("click", () => {
+  rows = []; headers = [];
+  copied.clear();
+  el("colCode").innerHTML = ""; el("colName").innerHTML = "";
+  el("fileName").textContent = "";
+  refresh();
+  showToast("数据已清空，重新导入即可");
+});
+
+fillSelects();
+refresh();
+</script>
+</body>
+</html>
