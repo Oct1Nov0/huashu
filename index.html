@@ -32,12 +32,8 @@
   h2{font-size:13.5px;font-weight:650;margin:0 0 10px;display:flex;align-items:baseline;gap:8px;color:var(--soft);}
   h2 .step{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--accent);font-size:12.5px;}
 
-  /* 方案标签 */
   .tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-  .tab{
-    border:1px solid var(--line);background:var(--card);color:var(--soft);
-    font-size:13.5px;padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;
-  }
+  .tab{border:1px solid var(--line);background:var(--card);color:var(--soft);font-size:13.5px;padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;}
   .tab:hover{color:var(--ink);border-color:var(--soft);}
   .tab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
   .tab.on:hover{color:#fff;}
@@ -49,21 +45,22 @@
     width:100%;border:1px solid var(--line);border-radius:8px;background:#FBFBF8;
     font:inherit;font-size:14px;color:var(--ink);padding:10px 12px;resize:vertical;
   }
-  textarea{line-height:1.75;}
+  textarea{line-height:1.75;min-height:120px;}
   textarea:focus,input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;}
-  #tpl{min-height:210px;}
   #paste{min-height:92px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;}
-  .chipbox{margin-top:10px;}
-  .chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+
+  .part{border:1px solid var(--line);border-radius:10px;padding:10px 12px 12px;margin-bottom:12px;background:#FCFCFA;}
+  .parthead{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .partname{font-size:13px;font-weight:600;color:var(--accent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  .partdel{margin-left:auto;border:none;background:transparent;color:var(--soft);font-size:12.5px;}
+  .partdel:hover{color:#9A4B31;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:8px;}
   .chips .lead{font-size:12.5px;color:var(--soft);margin-right:2px;}
-  .chip{
-    border:1px solid var(--line);background:var(--paper);color:var(--ink);
-    font-size:12.5px;padding:5px 10px;border-radius:999px;cursor:pointer;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  }
+  .chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:12.5px;padding:4px 9px;border-radius:999px;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
   .chip:hover{border-color:var(--accent);color:var(--accent);}
   .chip.cond{border-style:dashed;}
   .chip.cond:hover{border-color:var(--cond);color:var(--cond);}
+
   .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;}
   .row:first-child{margin-top:0;}
   label.file{border:1px solid var(--accent);color:var(--accent);background:transparent;font-size:13.5px;padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-block;}
@@ -80,17 +77,23 @@
   .map{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:12px;}
   .map label{font-size:13.5px;color:var(--soft);display:flex;gap:6px;align-items:center;}
   .checkline{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--soft);}
+
   ul{list-style:none;margin:14px 0 0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
-  li{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--card);}
+  li{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--card);flex-wrap:wrap;}
   li:last-child{border-bottom:none;}
   li.done{background:var(--done-soft);}
-  .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;font-weight:600;letter-spacing:.05em;color:var(--accent);min-width:62px;}
+  .code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;font-weight:600;letter-spacing:.05em;color:var(--accent);min-width:58px;}
   li.done .code{color:var(--done);}
-  .name{flex:1;min-width:0;overflow-wrap:anywhere;font-size:14.5px;}
-  .tag{font-size:12px;color:var(--cond);border:1px solid var(--cond);border-radius:999px;padding:2px 8px;white-space:nowrap;}
-  .copy{border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:13.5px;padding:7px 16px;border-radius:8px;white-space:nowrap;}
-  .copy:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
-  li.done .copy{background:transparent;color:var(--done);border-color:var(--done);}
+  .name{flex:1 1 120px;min-width:0;overflow-wrap:anywhere;font-size:14.5px;}
+  .seg{display:flex;gap:6px;}
+  .segbtn{
+    border:1px solid var(--accent);background:var(--accent);color:#fff;
+    font-size:13.5px;min-width:38px;padding:7px 12px;border-radius:8px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .segbtn:hover{background:var(--accent-dark);border-color:var(--accent-dark);}
+  .segbtn.ok{background:transparent;color:var(--done);border-color:var(--done);}
+  .segbtn.skip{background:transparent;color:var(--line);border-color:var(--line);cursor:default;}
   .empty{padding:22px 14px;color:var(--soft);font-size:14px;text-align:center;background:var(--card);}
   .count{font-size:13px;color:var(--soft);}
   .warn{color:#9A4B31;font-size:13px;margin:10px 0 0;}
@@ -99,15 +102,11 @@
   details.doc h3{font-size:13.5px;margin:16px 0 4px;}
   details.doc p{font-size:13.5px;color:var(--soft);margin:0;}
   details.doc code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink);}
-  details.inline{margin-top:12px;}
+  details.inline{margin-top:6px;}
   details.inline summary{cursor:pointer;font-size:13px;color:var(--soft);}
-  .preview-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;}
   pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:inherit;font-size:13.5px;background:var(--paper);border-radius:8px;padding:12px;margin:10px 0 0;}
-  .toast{
-    position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
-    background:var(--ink);color:#fff;font-size:14px;padding:10px 18px;border-radius:999px;
-    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:90vw;text-align:center;
-  }
+  pre .sep{color:var(--soft);font-size:12px;}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--ink);color:#fff;font-size:14px;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;max-width:90vw;text-align:center;}
   .toast.show{opacity:1;transform:translate(-50%,0);}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
 </style>
@@ -125,19 +124,19 @@
     <summary>使用说明</summary>
 
     <h3>方案切换</h3>
-    <p>上面一排是方案。每个方案有自己的话术模板和自己的表格数据，互不影响，点一下就切过去。方案名点第二下可以改名，右边的加号新建空白方案。删除方案在最下面。</p>
+    <p>上面一排是方案，每个方案有自己的模板和表格，点一下切换。点当前选中的标签第二下可以改名，右边加号新建。</p>
 
-    <h3>导入数据</h3>
-    <p>支持 Excel、CSV 文件，也可以在 Excel 里选中区域复制，粘贴到粘贴框再点读取。读完之后指定哪一列是码、哪一列是用户名，一般会自动认出来。表格没有标题行的话，把「第一行是标题」的勾去掉再读一次。</p>
+    <h3>分段发送</h3>
+    <p>一个方案里可以放多段话术，闲鱼一条消息发不下就拆开。列表里每个人后面会出现 1、2、3 三个按钮，按顺序点，点过的按钮变成描边样式，中途被打断也知道发到哪了。某一段因为条件不成立整段是空的，那个按钮会变灰不能点。</p>
 
     <h3>替换位置</h3>
     <p>花括号加列名，比如 <code>{查询码}</code>，生成时换成这一行的内容。列名跟着当前方案导入的表格标题走。</p>
 
     <h3>条件段落</h3>
-    <p>方括号包起来的内容只发给那一列有数值的人，比如 <code>[[岛内金额]]需要补岛内{岛内金额}r[[/岛内金额]]</code>。金额是 0 或者空白时，整段连同换行一起消失。</p>
+    <p>方括号包起来的内容只发给那一列有数值的人，比如 <code>[[岛内金额]]需补岛内{岛内金额}r[[/岛内金额]]</code>。金额是 0 或者空白时整段消失。如果整段第三段都是条件内容，那这个人的第三段就不用发了。</p>
 
     <h3>保存</h3>
-    <p>所有方案的模板、数据、已复制标记都存在这台设备的浏览器里，关掉页面或者不小心退出，下次打开还在。换设备或者换浏览器看不到，清理浏览器数据也会丢。</p>
+    <p>方案、模板、数据、复制进度都存在这台设备的浏览器里，关掉页面下次打开还在。换设备或者清理浏览器数据会丢。</p>
   </details>
 
   <section>
@@ -164,18 +163,14 @@
 
   <section>
     <h2><span class="step">02</span>话术模板</h2>
-    <textarea id="tpl" spellcheck="false"></textarea>
-    <div class="chipbox">
-      <div class="chips" id="chips"><span class="lead">替换</span></div>
-    </div>
-    <div class="chipbox">
-      <div class="chips" id="condChips"><span class="lead">条件</span></div>
+    <div id="parts"></div>
+    <div class="row">
+      <button class="btn ghost sm" id="addPart">加一段</button>
+      <span class="count">每段对应列表里的一个复制按钮</span>
     </div>
     <details class="inline">
       <summary>预览</summary>
-      <div class="preview-head">
-        <select id="previewPick"></select>
-      </div>
+      <div class="row" style="margin-top:10px;"><select id="previewPick"></select></div>
       <pre id="preview">先导入数据再看预览。</pre>
     </details>
   </section>
@@ -188,7 +183,7 @@
     </div>
     <ul id="list"></ul>
     <div class="row" style="margin-top:14px;">
-      <button class="btn ghost sm" id="reset">清除复制标记</button>
+      <button class="btn ghost sm" id="reset">清除复制进度</button>
       <button class="btn ghost sm" id="clearData">清空本方案数据</button>
       <button class="btn ghost sm" id="delScheme">删除本方案</button>
     </div>
@@ -199,27 +194,20 @@
 
 <script>
 /* ---------- 预置方案 ---------- */
-const TPL_LIST =
-"老师好，ick生日已出荷，月底准备寄回国，到时候我来私聊补国际国内运费。\n" +
-"以下表格是生日抽赏的排表list，之后会交给代发，作为发货的唯一凭证。\n" +
-"（下单数量多，数据有通过ai辅助处理，不保证100%正确。）请务必核对下单视频，确认自己的数量没有问题。\n" +
-"【发货后才发现list有问题的不处理售后！！】截止核对的ddl：8.31，如果超过ddl未核对自己的list，不处理任何售后\n" +
-"[url] 【金山文档｜WPS云文档】邀你查询「ick生日-查询谷子数量」\n" +
-"如果数量无误，点击表格下方按钮签收。有问题第一时间联系我。\n" +
-"老师请输入以下数字查询：{查询码}\n" +
-"[[岛内金额]]*补岛内通知：每抽的岛内是0.72，老师抽了{总计几样}抽，需要补岛内{岛内金额}r，直接在聊天框zz即可。\n" +
-"注意：不补岛内无法发货，请及时补岛内。[[/岛内金额]]";
-
-const TPL_YOU =
-"老师好，ick生日补完国际和国内可以排发，没补不发货。发货时间是下周陆续发。\n" +
-"（如果超出首重or偏远地区，需要根据实收补国内邮费）\n" +
-"补款通过xy直接zz即可，图片是国际费用明细。\n" +
-"排发请填写以下表格发给我（因为xy改版所以无法再通过xy物流发，后续会在聊天框告知单号）\n" +
-"老师需要补：国际{国际}+国内首重8=【{补邮}r】";
-
 const SAMPLE_LIST = {
   name: "生日核对",
-  tpl: TPL_LIST,
+  parts: [
+"老师好，mzk生日已出荷，预计9月下旬到国内，到时候我会来私聊补国际国内运费。\n" +
+"以下表格是生日抽赏的排表list，之后会交给代发，作为发货的唯一凭证。\n" +
+"（下单数量多，数据有通过ai辅助处理，不保证100%正确。）请务必核对下单视频，确认自己的数量没有问题。\n" +
+"【发货后才发现list有问题的不处理售后！！】截止核对的ddl：9.23，如果超过ddl未核对自己的list，不处理任何售后",
+
+"[url] 【WPS云文档邀你查询「mzk生日」】\n" +
+"如果数量无误，点击表格下方按钮签收。有问题第一时间联系我。\n" +
+"老师请输入以下数字查询：{查询码}",
+
+"[[岛内金额]]老师抽了{总计几样}抽，需补岛内{岛内金额}r[[/岛内金额]]"
+  ],
   headers: ["查询码","用户名","总计几样","岛内金额"],
   rows: [["xxxx","示例老师A","3","2.16"],["xxxx","示例老师B","0","0"]],
   ci: 0, ni: 1, copied: []
@@ -227,7 +215,14 @@ const SAMPLE_LIST = {
 
 const SAMPLE_YOU = {
   name: "排发补邮",
-  tpl: TPL_YOU,
+  parts: [
+"老师好，生日补完国际和国内可以排发，没补不发货。发货时间是下周陆续发。\n" +
+"（如果超出首重or偏远地区，需要根据实收补国内邮费）\n" +
+"补款通过xy直接zz即可，图片是国际费用明细。\n" +
+"排发请填写以下表格发给我（因为xy改版所以无法再通过xy物流发，后续会在聊天框告知单号）",
+
+"老师需要补：国际{国际}+国内首重8=【{补邮}r】"
+  ],
   headers: ["查询码","用户名","国际","国内","补邮"],
   rows: [
 ["xxxx","示例老师A","xx.xx","8","xx.xx"],
@@ -238,19 +233,17 @@ const SAMPLE_YOU = {
 };
 
 /* ---------- 状态 ---------- */
-const KEY = "huashu.v4";
+const KEY = "huashu.v5";
 let schemes = [];
 let cur = 0;
+let focusPart = 0;
 
 const el = id => document.getElementById(id);
-const tplEl = el("tpl"), listEl = el("list"), toastEl = el("toast");
-
+const listEl = el("list"), toastEl = el("toast");
 function S(){ return schemes[cur]; }
 
 function save(){
-  try{
-    localStorage.setItem(KEY, JSON.stringify({schemes:schemes, cur:cur}));
-  }catch(e){}
+  try{ localStorage.setItem(KEY, JSON.stringify({schemes:schemes, cur:cur})); }catch(e){}
 }
 function load(){
   try{
@@ -277,11 +270,9 @@ function renderTabs(){
     const b = document.createElement("button");
     b.className = "tab" + (i === cur ? " on" : "");
     b.type = "button";
-    const t = document.createElement("span");
-    t.textContent = s.name;
-    const n = document.createElement("span");
-    n.className = "n";
-    n.textContent = s.rows.length ? s.rows.length + "条" : "空";
+    const t = document.createElement("span"); t.textContent = s.name;
+    const n = document.createElement("span"); n.className = "n";
+    n.textContent = (s.rows.length ? s.rows.length + "条" : "空") + " / " + s.parts.length + "段";
     b.append(t, n);
     b.addEventListener("click", () => {
       if(i === cur){ renameScheme(i); return; }
@@ -294,7 +285,7 @@ function renderTabs(){
   add.addEventListener("click", () => {
     const name = prompt("新方案叫什么名字", "方案" + (schemes.length + 1));
     if(name === null) return;
-    schemes.push({name: name.trim() || ("方案" + (schemes.length + 1)), tpl: "", headers: [], rows: [], ci: 0, ni: 1, copied: []});
+    schemes.push({name: name.trim() || ("方案" + (schemes.length + 1)), parts: [""], headers: [], rows: [], ci: 0, ni: 1, copied: []});
     cur = schemes.length - 1;
     syncFromScheme(); save();
   });
@@ -308,32 +299,31 @@ function renameScheme(i){
   renderTabs(); save();
 }
 
-/* 把当前方案的内容装进界面 */
 function syncFromScheme(){
   const s = S();
-  tplEl.value = s.tpl;
   el("paste").value = "";
   el("fileName").textContent = "";
   el("q").value = "";
   warn("");
   fillSelects(s.ci, s.ni);
   renderTabs();
+  renderParts();
   refresh();
 }
 
 /* ---------- 解析 ---------- */
 function splitLine(line){
   if(line.indexOf("\t") >= 0) return line.split("\t");
-  const out = []; let cur2 = "", inQ = false;
+  const out = []; let buf = "", inQ = false;
   for(let i = 0; i < line.length; i++){
     const ch = line[i];
     if(ch === '"'){
-      if(inQ && line[i+1] === '"'){ cur2 += '"'; i++; }
+      if(inQ && line[i+1] === '"'){ buf += '"'; i++; }
       else inQ = !inQ;
-    } else if(ch === "," && !inQ){ out.push(cur2); cur2 = ""; }
-    else cur2 += ch;
+    } else if(ch === "," && !inQ){ out.push(buf); buf = ""; }
+    else buf += ch;
   }
-  out.push(cur2);
+  out.push(buf);
   return out;
 }
 
@@ -347,7 +337,6 @@ function loadTable(matrix){
   matrix = matrix.map(r => r.map(c => (c === null || c === undefined ? "" : String(c).trim())))
                  .filter(r => r.some(c => c !== ""));
   if(matrix.length === 0){ warn("没有读到内容，检查一下表格是不是空的。"); return; }
-
   const s = S();
   if(el("hasHeader").checked && matrix.length > 1){
     s.headers = matrix[0].map((h, i) => h || ("列" + (i + 1)));
@@ -359,8 +348,7 @@ function loadTable(matrix){
   s.copied = [];
   warn("");
   fillSelects();
-  renderTabs();
-  refresh(); save();
+  renderTabs(); renderParts(); refresh(); save();
   showToast("已读取 " + s.rows.length + " 行");
 }
 
@@ -416,7 +404,7 @@ el("file").addEventListener("change", e => {
   isCsv ? reader.readAsText(f, "UTF-8") : reader.readAsArrayBuffer(f);
 });
 
-/* ---------- 模板与条件段落 ---------- */
+/* ---------- 模板 ---------- */
 function esc(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
 function hasValue(v){
@@ -427,9 +415,9 @@ function hasValue(v){
   return true;
 }
 
-function fill(row){
+function fillPart(text, row){
   const s = S();
-  let out = tplEl.value;
+  let out = text;
   s.headers.forEach((h, i) => {
     const re = new RegExp("\\[\\[" + esc(h) + "\\]\\]([\\s\\S]*?)\\[\\[\\/" + esc(h) + "\\]\\]\\n?", "g");
     out = out.replace(re, (m, inner) => hasValue(row[i]) ? inner : "");
@@ -437,44 +425,77 @@ function fill(row){
   s.headers.forEach((h, i) => {
     out = out.split("{" + h + "}").join(row[i] === undefined ? "" : row[i]);
   });
-  return out.replace(/\n{3,}/g, "\n\n").trimEnd();
+  return out.replace(/\n{3,}/g, "\n\n").trim();
 }
 
-function usesCondition(row){
+function renderParts(){
   const s = S();
-  return s.headers.some((h, i) => {
-    const re = new RegExp("\\[\\[" + esc(h) + "\\]\\][\\s\\S]*?\\[\\[\\/" + esc(h) + "\\]\\]");
-    return re.test(tplEl.value) && !hasValue(row[i]);
+  const box = el("parts");
+  box.innerHTML = "";
+  s.parts.forEach((txt, idx) => {
+    const wrap = document.createElement("div");
+    wrap.className = "part";
+
+    const head = document.createElement("div");
+    head.className = "parthead";
+    const nm = document.createElement("span");
+    nm.className = "partname"; nm.textContent = "第 " + (idx + 1) + " 条";
+    head.appendChild(nm);
+    if(s.parts.length > 1){
+      const del = document.createElement("button");
+      del.className = "partdel"; del.type = "button"; del.textContent = "删掉这段";
+      del.addEventListener("click", () => {
+        if(!confirm("删掉第 " + (idx + 1) + " 条？")) return;
+        s.parts.splice(idx, 1);
+        s.copied = [];
+        renderTabs(); renderParts(); refresh(); save();
+      });
+      head.appendChild(del);
+    }
+    wrap.appendChild(head);
+
+    const ta = document.createElement("textarea");
+    ta.value = txt; ta.spellcheck = false;
+    ta.addEventListener("input", () => { s.parts[idx] = ta.value; save(); refresh(); });
+    ta.addEventListener("focus", () => { focusPart = idx; });
+    wrap.appendChild(ta);
+
+    const chips = document.createElement("div");
+    chips.className = "chips";
+    const lead = document.createElement("span");
+    lead.className = "lead"; lead.textContent = "插入";
+    chips.appendChild(lead);
+    s.headers.forEach(h => {
+      const b = document.createElement("button");
+      b.className = "chip"; b.type = "button"; b.textContent = "{" + h + "}";
+      b.addEventListener("click", () => insertInto(ta, idx, "{" + h + "}"));
+      chips.appendChild(b);
+    });
+    s.headers.forEach(h => {
+      const c = document.createElement("button");
+      c.className = "chip cond"; c.type = "button"; c.textContent = "[[" + h + "]]";
+      c.addEventListener("click", () => insertInto(ta, idx, "[[" + h + "]]\n\n[[/" + h + "]]"));
+      chips.appendChild(c);
+    });
+    wrap.appendChild(chips);
+
+    box.appendChild(wrap);
   });
 }
 
-function insert(text){
-  const a = tplEl.selectionStart, b = tplEl.selectionEnd;
-  tplEl.value = tplEl.value.slice(0, a) + text + tplEl.value.slice(b);
-  tplEl.focus();
-  tplEl.selectionStart = tplEl.selectionEnd = a + text.length;
-  S().tpl = tplEl.value;
+function insertInto(ta, idx, text){
+  const a = ta.selectionStart, b = ta.selectionEnd;
+  ta.value = ta.value.slice(0, a) + text + ta.value.slice(b);
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = a + text.length;
+  S().parts[idx] = ta.value;
   save(); refresh();
 }
 
-function renderChips(){
-  const box = el("chips"), cbox = el("condChips");
-  box.innerHTML = '<span class="lead">替换</span>';
-  cbox.innerHTML = '<span class="lead">条件</span>';
-  S().headers.forEach(h => {
-    const b = document.createElement("button");
-    b.className = "chip"; b.type = "button"; b.textContent = "{" + h + "}";
-    b.addEventListener("click", () => insert("{" + h + "}"));
-    box.appendChild(b);
-
-    const c = document.createElement("button");
-    c.className = "chip cond"; c.type = "button"; c.textContent = "[[" + h + "]]";
-    c.addEventListener("click", () => insert("[[" + h + "]]\n\n[[/" + h + "]]"));
-    cbox.appendChild(c);
-  });
-}
-
-tplEl.addEventListener("input", () => { S().tpl = tplEl.value; save(); refresh(); });
+el("addPart").addEventListener("click", () => {
+  S().parts.push("");
+  renderTabs(); renderParts(); refresh(); save();
+});
 
 /* ---------- 复制 ---------- */
 async function copyText(text){
@@ -509,7 +530,13 @@ function renderPreview(){
   const s = S();
   const sel = el("previewPick");
   const i = s.rows.length ? (+sel.value || 0) : -1;
-  el("preview").textContent = i >= 0 && s.rows[i] ? fill(s.rows[i]) : "先导入数据再看预览。";
+  if(i < 0 || !s.rows[i]){ el("preview").textContent = "先导入数据再看预览。"; return; }
+  const out = [];
+  s.parts.forEach((p, k) => {
+    const t = fillPart(p, s.rows[i]);
+    if(t) out.push("— 第 " + (k + 1) + " 条 —\n" + t);
+  });
+  el("preview").textContent = out.join("\n\n") || "这个人所有段落都是空的。";
 }
 
 function renderList(){
@@ -533,11 +560,18 @@ function renderList(){
     listEl.innerHTML = '<li class="empty">没有匹配的内容，换个关键词试试。</li>';
   }
 
+  let allDone = 0, total = 0;
+
   shown.forEach(r => {
     const code = r[s.ci] || "", name = r[s.ni] || "";
-    const key = code + "|" + name;
+    const base = code + "|" + name;
+    const texts = s.parts.map(p => fillPart(p, r));
+    const need = texts.map((t, k) => t ? k : -1).filter(k => k >= 0);
+    const finished = need.length > 0 && need.every(k => done.has(base + "#" + k));
+    total++; if(finished) allDone++;
+
     const li = document.createElement("li");
-    if(done.has(key)) li.className = "done";
+    if(finished) li.className = "done";
 
     const c = document.createElement("span");
     c.className = "code"; c.textContent = code;
@@ -545,48 +579,55 @@ function renderList(){
     n.className = "name"; n.textContent = name;
     li.append(c, n);
 
-    if(usesCondition(r)){
-      const t = document.createElement("span");
-      t.className = "tag"; t.textContent = "已跳过条件段落";
-      li.appendChild(t);
-    }
-
-    const b = document.createElement("button");
-    b.className = "copy";
-    b.textContent = done.has(key) ? "已复制" : "复制";
-    b.addEventListener("click", async () => {
-      const ok = await copyText(fill(r));
-      if(ok){
-        if(s.copied.indexOf(key) < 0) s.copied.push(key);
-        showToast("已复制 " + (name || code) + " 的话术");
-        renderList(); save();
+    const seg = document.createElement("span");
+    seg.className = "seg";
+    texts.forEach((t, k) => {
+      const b = document.createElement("button");
+      b.className = "segbtn";
+      b.textContent = String(k + 1);
+      if(!t){
+        b.classList.add("skip");
+        b.title = "这一段对这个人是空的，不用发";
+        b.disabled = true;
       }else{
-        showToast("复制失败，展开预览手动复制");
+        if(done.has(base + "#" + k)) b.classList.add("ok");
+        b.title = t.slice(0, 40);
+        b.addEventListener("click", async () => {
+          const ok = await copyText(t);
+          if(ok){
+            const key = base + "#" + k;
+            if(s.copied.indexOf(key) < 0) s.copied.push(key);
+            showToast("已复制 " + (name || code) + " 的第 " + (k + 1) + " 条");
+            renderList(); save();
+          }else{
+            showToast("复制失败，展开预览手动复制");
+          }
+        });
       }
+      seg.appendChild(b);
     });
-    li.appendChild(b);
+    li.appendChild(seg);
     listEl.appendChild(li);
   });
 
-  el("count").textContent = "共 " + s.rows.length + " 条，已复制 " + s.copied.length + " 条";
+  el("count").textContent = "共 " + s.rows.length + " 人，发完 " + allDone + " 人";
   el("rowCount").textContent = "当前 " + s.rows.length + " 行";
 }
 
 function refresh(){
-  renderChips();
   renderPreviewPicker();
   renderPreview();
   renderList();
 }
 
 el("q").addEventListener("input", renderList);
-el("colCode").addEventListener("change", () => { S().ci = +el("colCode").value; renderPreviewPicker(); renderList(); save(); });
-el("colName").addEventListener("change", () => { S().ni = +el("colName").value; renderPreviewPicker(); renderList(); save(); });
+el("colCode").addEventListener("change", () => { S().ci = +el("colCode").value; refresh(); save(); });
+el("colName").addEventListener("change", () => { S().ni = +el("colName").value; refresh(); save(); });
 el("previewPick").addEventListener("change", renderPreview);
 
 el("reset").addEventListener("click", () => {
   S().copied = [];
-  renderList(); save(); showToast("标记已清除");
+  renderList(); save(); showToast("进度已清除");
 });
 
 el("clearData").addEventListener("click", () => {
@@ -594,7 +635,7 @@ el("clearData").addEventListener("click", () => {
   s.rows = []; s.headers = []; s.copied = [];
   el("colCode").innerHTML = ""; el("colName").innerHTML = "";
   el("fileName").textContent = ""; el("paste").value = "";
-  renderTabs(); refresh(); save();
+  renderTabs(); renderParts(); refresh(); save();
   showToast("数据已清空，模板保留");
 });
 
@@ -614,7 +655,8 @@ el("delScheme").addEventListener("click", () => {
     schemes = d.schemes;
     schemes.forEach(s => {
       s.name = s.name || "方案";
-      s.tpl = s.tpl || "";
+      if(!Array.isArray(s.parts)) s.parts = [typeof s.tpl === "string" ? s.tpl : ""];
+      if(s.parts.length === 0) s.parts = [""];
       s.headers = Array.isArray(s.headers) ? s.headers : [];
       s.rows = Array.isArray(s.rows) ? s.rows : [];
       s.copied = Array.isArray(s.copied) ? s.copied : [];
